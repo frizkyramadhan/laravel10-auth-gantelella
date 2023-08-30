@@ -31,7 +31,7 @@
             </div>
             @endif
             <div class="table-responsive">
-              <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+              <table id="datatable-serverside" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                 <thead>
                   <tr>
                     <th>No</th>
@@ -42,25 +42,6 @@
                     <th class="text-center">Action</th>
                   </tr>
                 </thead>
-                <tbody>
-                  @foreach ($users as $user)
-                  <tr>
-                    <td class="text-center">{{ $loop->iteration }}</td>
-                    <td>{{ $user->name }}</td>
-                    <td>{{ $user->email }}</td>
-                    <td>{{ $user->role }}</td>
-                    <td>{{ $user->status }}</td>
-                    <td class="text-center">
-                      <form action="{{ url('users/' . $user->id) }}" method="post" onsubmit="return confirm('Are you sure want to delete this data?')">
-                        <a class="btn btn-sm btn-warning" data-toggle="modal" data-target=".bs-example-modal-md-{{ $user->id }}"><i class="fa fa-pencil"></i> &nbsp;Edit&nbsp;</a>
-                        @method('delete')
-                        @csrf
-                        <button class="btn btn-sm btn-danger"><i class="fa fa-times"></i> Delete</button>
-                      </form>
-                    </td>
-                  </tr>
-                  @endforeach
-                </tbody>
               </table>
             </div>
 
@@ -276,7 +257,6 @@
   });
 
 </script>
-
 {{-- script edit email unique validation --}}
 @foreach ($users as $user)
 <script>
@@ -309,7 +289,63 @@
 
 </script>
 @endforeach
+{{-- script datatable serverside --}}
+<script>
+  $(function() {
+    var table = $("#datatable-serverside").DataTable({
+      responsive: true
+      , autoWidth: true
+      , lengthChange: true
+      , lengthMenu: [
+        [10, 25, 50, 100, -1]
+        , ['10', '25', '50', '100', 'Show all']
+      ]
+      , dom: 'lBfrtpi'
+        // , dom: 'frtpi'
+      , buttons: ["copy", "csv", "print"]
+      , processing: true
+      , serverSide: true
+      , ajax: {
+        url: "{{ route('users.data') }}"
+        , data: function(d) {
+          d.search = $("input[type=search][aria-controls=datatable-serverside]").val()
+          // console.log(d);
+        }
+      }
+      , columns: [{
+        data: 'DT_RowIndex'
+        , orderable: false
+        , searchable: false
+        , className: 'text-center'
+      }, {
+        data: "name"
+        , name: "name"
+        , orderable: false
+      , }, {
+        data: "email"
+        , name: "email"
+        , orderable: false
+      , }, {
+        data: "role"
+        , name: "role"
+        , orderable: false
+      , }, {
+        data: "status"
+        , name: "status"
+        , orderable: false
+        , className: "text-center"
+      , }, {
+        data: "action"
+        , name: "action"
+        , orderable: false
+        , searchable: false
+        , className: "text-center"
+      }]
+      , fixedColumns: true
+    , })
+  });
 
+</script>
 
 
 @endsection

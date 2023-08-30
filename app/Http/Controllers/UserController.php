@@ -38,14 +38,14 @@ class UserController extends Controller
             ->addColumn('email', function ($users) {
                 return $users->email;
             })
-            ->addColumn('level', function ($users) {
-                return $users->level;
+            ->addColumn('role', function ($users) {
+                return $users->role;
             })
-            ->addColumn('user_status', function ($users) {
-                if ($users->user_status == '1') {
-                    return '<span class="badge badge-success">Active</span>';
-                } elseif ($users->user_status == '0') {
-                    return '<span class="badge badge-danger">Inactive</span>';
+            ->addColumn('status', function ($users) {
+                if ($users->status == 'active') {
+                    return '<span class="label label-success">Active</span>';
+                } elseif ($users->status == 'inactive') {
+                    return '<span class="label label-danger">Inactive</span>';
                 }
             })
             ->filter(function ($instance) use ($request) {
@@ -54,13 +54,13 @@ class UserController extends Controller
                         $search = $request->get('search');
                         $w->orWhere('name', 'LIKE', "%$search%")
                             ->orWhere('email', 'LIKE', "%$search%")
-                            ->orWhere('level', 'LIKE', "%$search%")
-                            ->orWhere('user_status', 'LIKE', "%$search%");
+                            ->orWhere('role', 'LIKE', "%$search%")
+                            ->orWhere('status', 'LIKE', "%$search%");
                     });
                 }
             })
             ->addColumn('action', 'users.action')
-            ->rawColumns(['user_status', 'action'])
+            ->rawColumns(['status', 'action'])
             ->toJson();
     }
 
