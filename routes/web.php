@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,5 +15,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('layouts.main');
+    return view('layouts.main', [
+        'title' => 'Dashboard'
+    ]);
 });
+
+Route::post('users/checkNewEmail', [UserController::class, 'checkNewEmail'])->name('users.checknewemail');
+Route::post('users/checkEditEmail/{id}', [UserController::class, 'checkEditEmail'])->name('users.checkeditemail');
+Route::resource('users', UserController::class)->except(['create', 'show', 'edit']);
