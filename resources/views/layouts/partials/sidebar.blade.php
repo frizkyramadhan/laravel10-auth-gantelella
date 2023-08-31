@@ -56,6 +56,7 @@
       </li>
     </ul>
   </div>
+  @can('admin')
   <div class="menu_section">
     <h3>Master Data</h3>
     <ul class="nav side-menu">
@@ -98,6 +99,7 @@
       <li><a href="{{ url('users') }}"><i class="fa fa-user"></i> Users</a></li>
     </ul>
   </div>
+  @endcan
 
 </div>
 <!-- /sidebar menu -->
