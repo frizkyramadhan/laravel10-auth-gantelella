@@ -12,10 +12,10 @@ use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
 
-    // public function __construct()
-    // {
-    //     $this->middleware('admin_auth:superadmin');
-    // }
+    public function __construct()
+    {
+        $this->middleware('admin_auth:admin');
+    }
 
     public function index()
     {
